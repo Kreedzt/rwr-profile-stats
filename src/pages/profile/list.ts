@@ -29,6 +29,10 @@ export const getViewList = (p: Profile): ProfileViewListItem[] => {
       value: p.stats.deaths,
     },
     {
+      label: CNTranslate["K/D"],
+      value: `${(p.stats.kills / p.stats.deaths).toFixed(2)}`,
+    },
+    {
       label: CNTranslate["soldiers_healed"],
       value: p.stats.soldiers_healed,
     },

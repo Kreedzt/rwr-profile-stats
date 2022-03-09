@@ -4,6 +4,7 @@
   "deaths": "死亡数",
   "distance_moved": "移动距离",
   "kills": "杀敌数",
+  "K/D": "杀敌/死亡比",
   "longest_kill_streak": "longest_kill_streak",
   "player_kills": "玩家击杀数",
   "rank_progression": "等级进度",
