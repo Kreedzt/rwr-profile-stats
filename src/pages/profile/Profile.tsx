@@ -2,7 +2,7 @@ import React, { FC, useCallback, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { ProfileService } from "../../services/profile";
 import { message } from "antd";
-import { getViewList, ProfileViewListItem } from "./list";
+import { getViewList, ProfileViewListItem } from "./utils";
 
 const Profile: FC<
   RouteComponentProps & {
