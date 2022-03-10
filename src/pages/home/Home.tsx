@@ -18,10 +18,10 @@ const Home: FC<RouteComponentProps> = () => {
   const [searchText, setSearchText] = useState<string>();
   const [nameUserList, setNameUserList] = useState<AllListItem[]>([]);
 
-  const refreshList = useCallback(async () => {
+  const refreshList = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
-      const allList = await ProfileService.queryAllCache();
+      const allList = await ProfileService.queryAllCache(force);
       setAllList(allList);
     } catch (e) {
       console.log(e);
@@ -60,15 +60,28 @@ const Home: FC<RouteComponentProps> = () => {
             />
             <Button
               danger
+              loading={loading}
+              onClick={() => {
+                setSearchText("");
+                setNameUserList([]);
+                refreshList(true);
+              }}
+            >
+              强制重新获取(请求时间稍长)
+            </Button>
+
+            <Button
+              loading={loading}
+              danger
               onClick={() => {
                 setSearchText("");
                 setNameUserList([]);
               }}
             >
-              重置
+              重置查询内容
             </Button>
 
-            <Button loading={loading} onClick={onQuery}>
+            <Button type="primary" loading={loading} onClick={onQuery}>
               查询
             </Button>
             <List

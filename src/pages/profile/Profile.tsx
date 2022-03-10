@@ -27,14 +27,14 @@ const Profile: FC<
     progress: 0,
   });
 
-  const refreshProfile = useCallback(async () => {
+  const refreshProfile = useCallback(async (force?: boolean) => {
     if (!profileId) {
       message.warn("未找到信息");
       return;
     }
     try {
       setLoading(true);
-      const allList = await ProfileService.queryAllCache();
+      const allList = await ProfileService.queryAllCache(force);
 
       const info = allList.find(([pId, person, profile]) => {
         return pId === +profileId;
@@ -78,26 +78,31 @@ const Profile: FC<
       <Button>
         <Link to="/">返回主页</Link>
       </Button>
-      <Button loading={loading} onClick={refreshProfile}>
-        重新获取
+      <Button danger loading={loading} onClick={() => refreshProfile(true)}>
+        强制重新获取(请求时间稍长)
       </Button>
       <p>Profile: {profileId}</p>
-      {loading && "请求中, 请稍候"}
-      <div>
-        <p>XP: {currentProfile?.stats.rank_progression}</p>
-        <p>当前等级: {progressData.currentLabel}</p>
-        <p>下一等级: {progressData.nextLabel}</p>
-        <p>下一阶段所需XP: {progressData.nextXp}</p>
-        <Progress percent={progressPercent} />
-      </div>
-      {viewList.map((v) => (
-        <div key={v.label}>
-          <p>
-            {v.label}: {v.displayText}
-            {v.rank && <span>#{v.rank}</span>}
-          </p>
-        </div>
-      ))}
+      {loading ? (
+        "请求中, 请稍候"
+      ) : (
+        <>
+          <div>
+            <p>XP: {currentProfile?.stats.rank_progression}</p>
+            <p>当前等级: {progressData.currentLabel}</p>
+            <p>下一等级: {progressData.nextLabel}</p>
+            <p>下一阶段所需XP: {progressData.nextXp}</p>
+            <Progress percent={progressPercent} />
+          </div>
+          {viewList.map((v) => (
+            <div key={v.label}>
+              <p>
+                {v.label}: {v.displayText}
+                {v.rank && <span>#{v.rank}</span>}
+              </p>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 };
