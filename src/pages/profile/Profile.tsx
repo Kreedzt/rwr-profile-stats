@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
-import { message, Progress, Spin } from "antd";
+import { Button, message, Progress, Spin } from "antd";
 import {
   getRankProgressPercent,
   getViewList,
@@ -75,6 +75,12 @@ const Profile: FC<
 
   return (
     <div>
+      <Button>
+        <Link to="/">返回主页</Link>
+      </Button>
+      <Button loading={loading} onClick={refreshProfile}>
+        重新获取
+      </Button>
       <p>Profile: {profileId}</p>
       {loading && "请求中, 请稍候"}
       <div>

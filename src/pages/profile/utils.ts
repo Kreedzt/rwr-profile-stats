@@ -83,7 +83,16 @@ const getAllRankValue = (
   list.forEach((listItem) => {
     deathsRank.push(listItem.stats.deaths);
     killsRank.push(listItem.stats.kills);
-    kdRank.push(listItem.stats.kills / listItem.stats.deaths);
+
+    let kdRes = 0;
+
+    if (listItem.stats.deaths === 0) {
+      kdRes = listItem.stats.kills / 1;
+    } else {
+      kdRes = listItem.stats.kills / listItem.stats.deaths;
+    }
+
+    kdRank.push(kdRes);
     playerKillsRank.push(listItem.stats.player_kills);
     rankProgressRank.push(listItem.stats.rank_progression);
     shotsFiredRank.push(listItem.stats.shots_fired);
