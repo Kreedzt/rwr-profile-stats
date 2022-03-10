@@ -78,25 +78,23 @@ const Home: FC<RouteComponentProps> = () => {
               value={searchText}
               placeholder="输入用户名查询"
               onChange={(e) => setSearchText(e.target.value)}
-              addonAfter={
-                <>
-                  <Button
-                    loading={loading}
-                    danger
-                    onClick={() => {
-                      setSearchText("");
-                      setNameUserList([]);
-                    }}
-                  >
-                    重置查询内容
-                  </Button>
-
-                  <Button type="primary" loading={loading} onClick={onQuery}>
-                    查询
-                  </Button>
-                </>
-              }
             />
+            <div>
+              <Button
+                loading={loading}
+                danger
+                onClick={() => {
+                  setSearchText("");
+                  setNameUserList([]);
+                }}
+              >
+                重置查询内容
+              </Button>
+
+              <Button type="primary" loading={loading} onClick={onQuery}>
+                查询
+              </Button>
+            </div>
             <Button
               danger
               loading={loading}
