@@ -1,10 +1,33 @@
 .home-layout {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+
   .home-content {
+    flex: 1;
+    overflow: auto;
+
     .query-area {
       .query-name-res-list {
         max-height: 500px;
         overflow: auto;
       }
     }
+    .query-list-item {
+      background-color: #f8fdff;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #d1d9ff;
+      }
+    }
+  }
+
+  .home-footer {
+    flex: 0 0 70px;
+    background-color: #fff;
+    border-top: 1px solid #61dafb;
   }
 }

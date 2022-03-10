@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
-import { Button, message, Progress, Spin } from "antd";
+import {Alert, Button, message, Progress, Spin} from "antd";
 import {
   getRankProgressPercent,
   getViewList,
@@ -74,14 +74,24 @@ const Profile: FC<
   }, [progressData.progress]);
 
   return (
-    <div>
+    <div className="profile-page">
+      <div>
+        <Alert
+          message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
+          type="warning"
+        />
+        <Alert
+            message="可将此页面地址保存, 下次直接进入"
+            type="success"
+        />
+      </div>
       <Button>
-        <Link to="/">返回主页</Link>
+        <Link to="/">&lt; 返回主页</Link>
       </Button>
       <Button danger loading={loading} onClick={() => refreshProfile(true)}>
         强制重新获取(请求时间稍长)
       </Button>
-      <p>Profile: {profileId}</p>
+      <p>存档ID: {profileId}</p>
       {loading ? (
         "请求中, 请稍候"
       ) : (
