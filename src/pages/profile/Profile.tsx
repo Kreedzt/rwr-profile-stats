@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
-import {Alert, Button, message, Progress, Spin} from "antd";
+import { Alert, Button, Col, message, Progress, Row, Spin } from "antd";
 import {
   getRankProgressPercent,
   getViewList,
@@ -9,6 +9,7 @@ import {
   ProgressInfo,
 } from "./utils";
 import { Profile as ProfileModel } from "../../models/profile";
+import "./Profile.less";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -80,10 +81,8 @@ const Profile: FC<
           message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
           type="warning"
         />
-        <Alert
-            message="可将此页面地址保存, 下次直接进入"
-            type="success"
-        />
+        <Alert message="可将此页面地址保存, 下次直接进入" type="success" />
+        <Alert message={`符号 '#' 表示排行`} type="success" />
       </div>
       <Button>
         <Link to="/">&lt; 返回主页</Link>
@@ -96,20 +95,68 @@ const Profile: FC<
         "请求中, 请稍候"
       ) : (
         <>
-          <div>
-            <p>XP: {currentProfile?.stats.rank_progression}</p>
-            <p>当前等级: {progressData.currentLabel}</p>
-            <p>下一等级: {progressData.nextLabel}</p>
-            <p>下一阶段所需XP: {progressData.nextXp}</p>
-            <Progress percent={progressPercent} />
+          <div className="xp-info">
+            <Row gutter={10}>
+              <Col className="tar" span={12}>
+                XP:
+              </Col>
+              <Col span={12} className="tal">
+                {currentProfile?.stats.rank_progression
+                  ? currentProfile?.stats.rank_progression * 10000
+                  : 0}
+              </Col>
+            </Row>
+            <Row gutter={10}>
+              <Col className="tar" span={12}>
+                当前等级:
+              </Col>
+              <Col span={12} className="tal">
+                {progressData.currentLabel}
+              </Col>
+            </Row>
+            <Row gutter={10}>
+              <Col className="tar" span={12}>
+                下一等级:
+              </Col>
+              <Col span={12} className="tal">
+                {progressData.nextLabel}
+              </Col>
+            </Row>
+
+            <Row gutter={10}>
+              <Col className="tar" span={12}>
+                下一等级目标XP:
+              </Col>
+              <Col span={12} className="tal">
+                {progressData.nextXp * 10000}
+              </Col>
+            </Row>
+
+            <Row gutter={10}>
+              <Col className="tar" span={12}>
+                进度:
+              </Col>
+              <Col span={12} className="tal">
+                {progressPercent}%
+              </Col>
+            </Row>
+            <Progress percent={progressPercent} showInfo={false} />
           </div>
           {viewList.map((v) => (
-            <div key={v.label}>
-              <p>
-                {v.label}: {v.displayText}
-                {v.rank && <span>#{v.rank}</span>}
-              </p>
-            </div>
+            <Row key={v.label} gutter={10}>
+              <Col className="tar" span={12}>
+                {v.label}:
+              </Col>
+              <Col className="tal" span={12}>
+                {v.displayText}
+                {v.rank && (
+                  <>
+                    <span>&nbsp; | &nbsp;</span>
+                    <span>#{v.rank}</span>
+                  </>
+                )}
+              </Col>
+            </Row>
           ))}
         </>
       )}
