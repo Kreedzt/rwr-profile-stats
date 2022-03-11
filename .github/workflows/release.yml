@@ -1,0 +1,31 @@
+# .github/workflows/release.yml
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Nodejs
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - name: Install Zip
+        uses: montudor/action-zip@v1
+      - name: Install
+        run: npm i -g pnpm && pnpm i
+      - name: Build
+        run: pnpm build
+      - name: Copy
+        run: cp LICENSE dist && cp README.md dist
+      - name: Compress
+        working-directory: dist
+        run: zip -r ../dist.zip .
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist.zip
