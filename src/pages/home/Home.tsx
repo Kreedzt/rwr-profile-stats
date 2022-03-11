@@ -97,6 +97,7 @@ const Home: FC<RouteComponentProps> = () => {
               </Button>
             </div>
             <RefreshButton
+              loading={loading}
               onRefresh={() => {
                 setSearchText("");
                 setNameUserList([]);
