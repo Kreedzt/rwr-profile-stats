@@ -10,6 +10,7 @@ import {
 } from "./utils";
 import { Profile as ProfileModel } from "../../models/profile";
 import "./Profile.less";
+import RefreshButton from "../../components/refreshButton/RefreshButton";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -87,9 +88,7 @@ const Profile: FC<
       <Button>
         <Link to="/">&lt; 返回主页</Link>
       </Button>
-      <Button danger loading={loading} onClick={() => refreshProfile(true)}>
-        强制重新获取(请求时间稍长)
-      </Button>
+      <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
       <p>存档ID: {profileId}</p>
       {loading ? (
         "请求中, 请稍候"

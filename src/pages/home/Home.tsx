@@ -6,6 +6,7 @@ import { Person } from "../../models/person";
 import { Profile } from "../../models/profile";
 import { ProfileService } from "../../services/profile";
 import "./Home.less";
+import RefreshButton from "../../components/refreshButton/RefreshButton";
 
 const { Footer, Content } = Layout;
 const { Item: ListItem } = List;
@@ -95,17 +96,13 @@ const Home: FC<RouteComponentProps> = () => {
                 查询
               </Button>
             </div>
-            <Button
-              danger
-              loading={loading}
-              onClick={() => {
+            <RefreshButton
+              onRefresh={() => {
                 setSearchText("");
                 setNameUserList([]);
                 refreshList(true);
               }}
-            >
-              强制重新获取(请求时间稍长)
-            </Button>
+            />
 
             <List
               className="query-name-res-list"
