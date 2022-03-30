@@ -251,7 +251,7 @@ export const getViewList = (
       label: CNTranslate["time_played"],
       value: p.stats.time_played,
       rank: rankValue["time_played"],
-      displayText: `${(p.stats.time_played / 100).toFixed(0)} 分钟`,
+      displayText: `${(p.stats.time_played / 60).toFixed(0)} 分钟`,
     },
     {
       label: CNTranslate["vehicles_destroyed"],
