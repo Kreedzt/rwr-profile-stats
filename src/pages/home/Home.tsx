@@ -121,7 +121,7 @@ const Home: FC<RouteComponentProps> = () => {
                     <span>用户名: {item[2].username}</span>
                     &nbsp; |&nbsp;
                     <span>
-                      游玩时间: {item[2].stats.time_played / 60} 分钟
+                      游玩时间: {(item[2].stats.time_played / 60).toFixed()} 分钟
                     </span>
                   </Typography.Text>
                   <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
@@ -148,7 +148,7 @@ const Home: FC<RouteComponentProps> = () => {
                   &nbsp; |&nbsp;
                   <span>用户名: {item[2].username}</span>
                   &nbsp; |&nbsp;
-                  <span>XP: {item[2].stats.rank_progression * 10000}</span>
+                  <span>XP: {(item[2].stats.rank_progression * 10000).toFixed(2)}</span>
                 </Typography.Text>
                 <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
               </ListItem>

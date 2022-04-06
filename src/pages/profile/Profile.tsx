@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
-import { Alert, Button, Col, message, Progress, Row, Spin } from "antd";
+import { Alert, Button, Col, message, Progress, Row } from "antd";
 import {
   getRankProgressPercent,
   getViewList,
@@ -9,8 +9,8 @@ import {
   ProgressInfo,
 } from "./utils";
 import { Profile as ProfileModel } from "../../models/profile";
-import "./Profile.less";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
+import "./Profile.less";
 
 const Profile: FC<
   RouteComponentProps & {
