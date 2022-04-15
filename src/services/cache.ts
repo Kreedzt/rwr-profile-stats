@@ -5,6 +5,7 @@ import {
   BUTTON_EXPIRED_STORAGE_KEY,
   QUERY_CACHE_STORAGE_KEY,
   QUERY_TIME_STORAGE_KEY,
+  RES_TIME_STORAGE_KEY,
 } from "../constants";
 import dayjs from "dayjs";
 
@@ -32,6 +33,12 @@ export const CacheService = {
     const nextExpiredTime = dayjs().add(1, "hour").unix();
     await localForage.setItem(QUERY_TIME_STORAGE_KEY, nextExpiredTime);
     await localForage.setItem(QUERY_CACHE_STORAGE_KEY, resData);
+  },
+  getResTimeCache: async (): Promise<string | undefined> => {
+    return await localForage.getItem(RES_TIME_STORAGE_KEY) as string | undefined;
+  },
+  setResTimeCache: async (time: string) => {
+    await localForage.setItem(RES_TIME_STORAGE_KEY, time);
   },
   getButtonExpiredTime: async (): Promise<number> => {
     const now = dayjs().unix();

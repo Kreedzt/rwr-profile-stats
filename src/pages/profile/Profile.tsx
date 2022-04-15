@@ -28,6 +28,7 @@ const Profile: FC<
     nextXp: 0,
     progress: 0,
   });
+  const [cacheTime, setCacheTime] = useState<string>();
 
   const refreshProfile = useCallback(async (force?: boolean) => {
     if (!profileId) {
@@ -36,7 +37,7 @@ const Profile: FC<
     }
     try {
       setLoading(true);
-      const allList = await ProfileService.queryAllCache(force);
+      const { allList, time } = await ProfileService.queryAllCacheV2(force);
 
       const info = allList.find(([pId, person, profile]) => {
         return pId === +profileId;
@@ -56,6 +57,8 @@ const Profile: FC<
           allList.map((info) => info[2])
         )
       );
+      setCacheTime(time);
+
       const progressInfo = getRankProgressPercent(profile);
       setProgressData(progressInfo);
 
@@ -89,7 +92,8 @@ const Profile: FC<
         <Link to="/">&lt; 返回主页</Link>
       </Button>
       <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
-      <p>存档ID: {profileId}</p>
+      <p>存档ID：{profileId}</p>
+      <p>更新时间：{cacheTime}</p>
       {loading ? (
         "请求中, 请稍候"
       ) : (

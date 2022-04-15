@@ -5,8 +5,8 @@ import { VERSION } from "../../constants";
 import { Person } from "../../models/person";
 import { Profile } from "../../models/profile";
 import { ProfileService } from "../../services/profile";
-import "./Home.less";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
+import "./Home.less";
 
 const { Footer, Content } = Layout;
 const { Item: ListItem } = List;
@@ -15,6 +15,7 @@ type AllListItem = [number, Person, Profile];
 
 const Home: FC<RouteComponentProps> = () => {
   const [allList, setAllList] = useState<AllListItem[]>([]);
+  const [cacheTime, setCacheTime] = useState<string>();
   const [loading, setLoading] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>();
   const [nameUserList, setNameUserList] = useState<AllListItem[]>([]);
@@ -34,8 +35,9 @@ const Home: FC<RouteComponentProps> = () => {
   const refreshList = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
-      const allList = await ProfileService.queryAllCache(force);
+      const { allList, time } = await ProfileService.queryAllCacheV2(force);
       setAllList(allList);
+      setCacheTime(time);
       refreshTop10List(allList);
     } catch (e) {
       console.log(e);
@@ -105,6 +107,8 @@ const Home: FC<RouteComponentProps> = () => {
               }}
             />
 
+            <p>更新时间：{cacheTime}</p>
+
             <List
               className="query-name-res-list"
               header={<div>查询结果列表</div>}
@@ -121,7 +125,8 @@ const Home: FC<RouteComponentProps> = () => {
                     <span>用户名: {item[2].username}</span>
                     &nbsp; |&nbsp;
                     <span>
-                      游玩时间: {(item[2].stats.time_played / 60).toFixed()} 分钟
+                      游玩时间: {(item[2].stats.time_played / 60).toFixed()}{" "}
+                      分钟
                     </span>
                   </Typography.Text>
                   <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
@@ -148,7 +153,9 @@ const Home: FC<RouteComponentProps> = () => {
                   &nbsp; |&nbsp;
                   <span>用户名: {item[2].username}</span>
                   &nbsp; |&nbsp;
-                  <span>XP: {(item[2].stats.rank_progression * 10000).toFixed(2)}</span>
+                  <span>
+                    XP: {(item[2].stats.rank_progression * 10000).toFixed(2)}
+                  </span>
                 </Typography.Text>
                 <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
               </ListItem>
