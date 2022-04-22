@@ -56,7 +56,7 @@ const Home: FC<RouteComponentProps> = () => {
         })
       );
     }
-  }, [searchText]);
+  }, [searchText, allList]);
 
   const onGotoDetail = useCallback((profileId: number) => {
     navigate(`/profile/${profileId}`);
