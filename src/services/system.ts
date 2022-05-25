@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { request } from "./request";
 import { CacheService } from "./cache";
+import { RankItem } from "../models/system";
 
 export const SYSTEM_API_PREFIX = "system";
 

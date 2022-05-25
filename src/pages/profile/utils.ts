@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import { Profile, Stats } from "../../models/profile";
+import { RankItem } from "../../models/system";
 import CNTranslate from "./translate_cn.json";
 
 interface GeneralArrayItem {
