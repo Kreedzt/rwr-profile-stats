@@ -4,6 +4,7 @@ import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
 import { Alert, Button, Col, message, Progress, Row } from "antd";
 import {
+    getDynamicRankProgressPercent,
   getRankProgressPercent,
   getViewList,
   ProfileViewListItem,
@@ -12,6 +13,8 @@ import {
 import { Profile as ProfileModel } from "../../models/profile";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
 import "./Profile.less";
+import { CacheService } from "../../services/cache";
+import { SystemService } from "../../services/system";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -40,6 +43,8 @@ const Profile: FC<
       setLoading(true);
       const { allList, time } = await ProfileService.queryAllCacheV2(force);
 
+      await SystemService.queryRanks(force);
+
       const info = allList.find(([pId, person, profile]) => {
         return pId === +profileId;
       });
@@ -60,7 +65,11 @@ const Profile: FC<
       );
       setCacheTime(time);
 
-      const progressInfo = getRankProgressPercent(profile);
+      const ranks = await CacheService.getRankCache();
+      if (!ranks) {
+        return;
+      }
+      const progressInfo = getDynamicRankProgressPercent(profile, ranks);
       setProgressData(progressInfo);
 
       console.log("res", pId, person, profile);

@@ -356,3 +356,37 @@ export const getRankProgressPercent = (p: Profile): ProgressInfo => {
     progress,
   };
 };
+
+export const getDynamicRankProgressPercent = (p: Profile, ranks: RankItem[]): ProgressInfo => {
+  const currentXp = p.stats.rank_progression;
+
+  let nextXp = 0;
+  let currentLabel = "";
+  let nextLabel = "";
+  let isFinished = false;
+  let progress = 0.0;
+
+  ranks.forEach((r) => {
+    if (isFinished) return;
+
+    nextXp = r.xp;
+    nextLabel = r.name;
+
+    // 当前 XP < 目标 XP, 终止
+    if (currentXp < nextXp) {
+      isFinished = true;
+      return;
+    }
+
+    currentLabel = r.name;
+  });
+
+  progress = currentXp / nextXp;
+
+  return {
+    currentLabel,
+    nextLabel,
+    nextXp,
+    progress,
+  };
+}

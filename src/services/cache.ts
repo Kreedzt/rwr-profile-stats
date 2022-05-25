@@ -6,6 +6,7 @@ import {
   BUTTON_EXPIRED_STORAGE_KEY,
   QUERY_CACHE_STORAGE_KEY,
   QUERY_TIME_STORAGE_KEY,
+  RANK_CACHE_STORAGE_KEY,
   RES_TIME_STORAGE_KEY,
 } from "../constants";
 import dayjs from "dayjs";
@@ -40,6 +41,12 @@ export const CacheService = {
   },
   setResTimeCache: async (time: string) => {
     await localForage.setItem(RES_TIME_STORAGE_KEY, time);
+  },
+  getRankCache: async (): Promise<RankItem[] | undefined> => {
+    return await localForage.getItem(RANK_CACHE_STORAGE_KEY) as RankItem | undefined;
+  },
+  setRankCache: async (ranks: RankItem[]) => {
+    await localForage.setItem(RANK_CACHE_STORAGE_KEY, ranks);
   },
   getButtonExpiredTime: async (): Promise<number> => {
     const now = dayjs().unix();

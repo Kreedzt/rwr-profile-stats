@@ -8,6 +8,7 @@ import { Profile } from "../../models/profile";
 import { ProfileService } from "../../services/profile";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
 import "./Home.less";
+import { SystemService } from "../../services/system";
 
 const { Footer, Content } = Layout;
 const { Item: ListItem } = List;
@@ -40,6 +41,10 @@ const Home: FC<RouteComponentProps> = () => {
       setAllList(allList);
       setCacheTime(time);
       refreshTop10List(allList);
+
+      // refresh ranks
+      const ranks = await SystemService.queryRanks(force);
+      console.log('ranks', ranks);
     } catch (e) {
       console.log(e);
     } finally {
