@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 import { Router } from "@reach/router";
 import dayjs from "dayjs";
 import duration from 'dayjs/plugin/duration';

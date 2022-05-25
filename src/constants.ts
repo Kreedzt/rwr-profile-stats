@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 export const QUERY_TIME_STORAGE_KEY = 'query-time';
 export const RES_TIME_STORAGE_KEY = 'res-time';
 export const QUERY_CACHE_STORAGE_KEY = 'cache';

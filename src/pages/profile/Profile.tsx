@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 import { request } from "./request";
 import { Profile } from "../models/profile";
 import { Person } from "../models/person";

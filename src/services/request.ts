@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 import { ErrorResponse } from "../models/response";
 import { message } from "antd";
 import { API_PREFIX, USER_ID_NOT_FOUND_MSG } from "../constants";
