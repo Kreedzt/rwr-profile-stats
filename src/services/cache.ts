@@ -2,6 +2,7 @@
 import * as localForage from "localforage";
 import { Person } from "../models/person";
 import { Profile } from "../models/profile";
+import { RankItem } from "../models/system";
 import {
   BUTTON_EXPIRED_STORAGE_KEY,
   QUERY_CACHE_STORAGE_KEY,
@@ -37,13 +38,17 @@ export const CacheService = {
     await localForage.setItem(QUERY_CACHE_STORAGE_KEY, resData);
   },
   getResTimeCache: async (): Promise<string | undefined> => {
-    return await localForage.getItem(RES_TIME_STORAGE_KEY) as string | undefined;
+    return (await localForage.getItem(RES_TIME_STORAGE_KEY)) as
+      | string
+      | undefined;
   },
   setResTimeCache: async (time: string) => {
     await localForage.setItem(RES_TIME_STORAGE_KEY, time);
   },
   getRankCache: async (): Promise<RankItem[] | undefined> => {
-    return await localForage.getItem(RANK_CACHE_STORAGE_KEY) as RankItem | undefined;
+    return (await localForage.getItem(RANK_CACHE_STORAGE_KEY)) as
+      | RankItem[]
+      | undefined;
   },
   setRankCache: async (ranks: RankItem[]) => {
     await localForage.setItem(RANK_CACHE_STORAGE_KEY, ranks);
