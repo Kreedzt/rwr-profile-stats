@@ -6,5 +6,5 @@ export const BUTTON_EXPIRED_STORAGE_KEY = 'button-expired';
 export const RANK_CACHE_STORAGE_KEY = 'rank';
 
 export const USER_ID_NOT_FOUND_MSG = "找不到用户信息";
-export const VERSION = "0.2.2";
+export const VERSION = "0.2.3";
 export const API_PREFIX = "/api";
