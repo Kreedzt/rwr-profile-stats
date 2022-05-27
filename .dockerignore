@@ -2,9 +2,12 @@
 /.idea
 /node_modules
 /.log
+/dist
+/.git
 
 LICENSE
 .ignore
 .prettierrc
 *.png
 *.7z
+vite.build.config.ts
