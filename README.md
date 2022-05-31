@@ -1,5 +1,10 @@
 # RWR GFL 存档数据查询
 
+![license](https://badgen.net/github/license/Kreedzt/rwr-profile-stats)
+![latest release](https://badgen.net/github/release/Kreedzt/rwr-profile-stats)
+![commits count](https://badgen.net/github/commits/Kreedzt/rwr-profile-stats)
+![last commit](https://badgen.net/github/last-commit/Kreedzt/rwr-profile-stats)
+
 ## 成品展示
 
 ![preview](preview.png)
