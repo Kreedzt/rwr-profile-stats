@@ -37,14 +37,15 @@ const Home: FC<RouteComponentProps> = () => {
   const refreshList = useCallback(async (force?: boolean) => {
     try {
       setLoading(true);
-      const { allList, time } = await ProfileService.queryAllCacheV2(force);
+      const [{ allList, time }, ranks] = await Promise.all([
+        ProfileService.queryAllCacheV2(force),
+        SystemService.queryRanks(force),
+      ]);
       setAllList(allList);
       setCacheTime(time);
       refreshTop10List(allList);
 
-      // refresh ranks
-      const ranks = await SystemService.queryRanks(force);
-      console.log('ranks', ranks);
+      console.log("ranks", ranks);
     } catch (e) {
       console.log(e);
     } finally {
