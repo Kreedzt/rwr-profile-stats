@@ -76,6 +76,9 @@ const Home: FC<RouteComponentProps> = () => {
   return (
     <Layout className="home-layout">
       <div>
+        {/*<h1 className="text-3xl font-bold underline">*/}
+        {/*  Hello world!*/}
+        {/*</h1>*/}
         <Alert
           message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
           type="warning"
