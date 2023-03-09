@@ -9,9 +9,13 @@ import { ProfileService } from "../../services/profile";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
 import "./Home.less";
 import { SystemService } from "../../services/system";
+import DangerButton from "../../components/button/DangerButton";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import ProfileListItem from "../../components/list/ProfileListItem";
+import MainFooter from "../../components/footer/MainFooter";
 
 const { Footer, Content } = Layout;
-const { Item: ListItem } = List;
+// const { Item: ListItem } = List;
 
 type AllListItem = [number, Person, Profile];
 
@@ -76,9 +80,6 @@ const Home: FC<RouteComponentProps> = () => {
   return (
     <Layout className="home-layout">
       <div>
-        {/*<h1 className="text-3xl font-bold underline">*/}
-        {/*  Hello world!*/}
-        {/*</h1>*/}
         <Alert
           message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
           type="warning"
@@ -93,22 +94,22 @@ const Home: FC<RouteComponentProps> = () => {
               onChange={(e) => setSearchText(e.target.value)}
             />
             <div>
-              <Button
-                loading={loading}
-                danger
+              <DangerButton
+                disabled={loading}
                 onClick={() => {
                   setSearchText("");
                   setNameUserList([]);
                 }}
               >
                 重置查询内容
-              </Button>
+              </DangerButton>
 
-              <Button type="primary" loading={loading} onClick={onQuery}>
+              <PrimaryButton disabled={loading} onClick={onQuery}>
                 查询
-              </Button>
+              </PrimaryButton>
             </div>
             <RefreshButton
+              className="m-2"
               loading={loading}
               onRefresh={() => {
                 setSearchText("");
@@ -119,61 +120,74 @@ const Home: FC<RouteComponentProps> = () => {
 
             <p>更新时间：{cacheTime}</p>
 
-            <List
-              className="query-name-res-list"
-              header={<div>查询结果列表</div>}
-              dataSource={nameUserList}
-              bordered
-              size="small"
-              renderItem={(item) => (
-                <ListItem
-                  key={item[0]}
-                  className="query-list-item"
-                  onClick={() => onGotoDetail(item[0])}
-                >
-                  <Typography.Text>
-                    <span>用户名: {item[2].username}</span>
-                    &nbsp; |&nbsp;
-                    <span>
-                      游玩时间: {(item[2].stats.time_played / 60).toFixed()}{" "}
-                      分钟
-                    </span>
-                  </Typography.Text>
-                  <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
-                </ListItem>
-              )}
-            />
+            <div>
+              <h5 className="font-sans text-xl font-semibold">查询结果列表</h5>
+              <ul className="query-name-res-list">
+                {nameUserList.map((item, index) => {
+                  return (
+                    <li key={item[0]}>
+                      <ProfileListItem
+                        onClick={() => onGotoDetail(item[0])}
+                        profile_id={item[0]}
+                        username={item[2].username}
+                        prefix={`#${index + 1}`}
+                        content={`XP: ${(
+                          item[2].stats.rank_progression * 10000
+                        ).toFixed(2)}`}
+                      />
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            {/*<List*/}
+            {/*  className="query-name-res-list"*/}
+            {/*  header={<div>查询结果列表</div>}*/}
+            {/*  dataSource={nameUserList}*/}
+            {/*  bordered*/}
+            {/*  size="small"*/}
+            {/*  renderItem={(item) => (*/}
+            {/*    <ListItem*/}
+            {/*      key={item[0]}*/}
+            {/*      className="query-list-item"*/}
+            {/*      onClick={() => onGotoDetail(item[0])}*/}
+            {/*    >*/}
+            {/*      <Typography.Text>*/}
+            {/*        <span>用户名: {item[2].username}</span>*/}
+            {/*        &nbsp; |&nbsp;*/}
+            {/*        <span>*/}
+            {/*          游玩时间: {(item[2].stats.time_played / 60).toFixed()}{" "}*/}
+            {/*          分钟*/}
+            {/*        </span>*/}
+            {/*      </Typography.Text>*/}
+            {/*      <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>*/}
+            {/*    </ListItem>*/}
+            {/*  )}*/}
+            {/*/>*/}
           </div>
         </div>
         <div className="top-10-area">
-          <List
-            className="query-name-res-list"
-            header={<div>XP Top 10</div>}
-            dataSource={top10List}
-            bordered
-            size="small"
-            renderItem={(item, index) => (
-              <ListItem
-                key={item[0]}
-                className="query-list-item"
-                onClick={() => onGotoDetail(item[0])}
-              >
-                <Typography.Text>
-                  <span>#{index + 1}</span>
-                  &nbsp; |&nbsp;
-                  <span>用户名: {item[2].username}</span>
-                  &nbsp; |&nbsp;
-                  <span>
-                    XP: {(item[2].stats.rank_progression * 10000).toFixed(2)}
-                  </span>
-                </Typography.Text>
-                <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>
-              </ListItem>
-            )}
-          />
+          <h5 className="font-sans text-xl font-semibold">XP Top 10</h5>
+          <ul className="query-name-res-list">
+            {top10List.map((item, index) => {
+              return (
+                <li key={item[0]}>
+                  <ProfileListItem
+                    profile_id={item[0]}
+                    username={item[2].username}
+                    prefix={`#${index + 1}`}
+                    content={`XP: ${(
+                      item[2].stats.rank_progression * 10000
+                    ).toFixed(2)}`}
+                  />
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </Content>
-      <Footer className="home-footer">RWR 信息查询系统, v: {VERSION}</Footer>
+      {/*<Footer className="home-footer">RWR 信息查询系统, v: {VERSION}</Footer>*/}
+      <MainFooter />
     </Layout>
   );
 };
