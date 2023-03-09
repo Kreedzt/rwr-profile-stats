@@ -110,7 +110,7 @@ const Profile: FC<
         "请求中, 请稍候"
       ) : (
         <>
-          <div className="xp-info">
+          <div className="p-2 border border-blue-200 mb-2">
             <Row gutter={10}>
               <Col className="tar" span={12}>
                 XP:
@@ -156,10 +156,6 @@ const Profile: FC<
               </Col>
             </Row>
             <ProgressBar value={progressPercent} />
-            {/*<progress max={100} value={progressPercent}>*/}
-            {/*  {progressPercent}%*/}
-            {/*</progress>*/}
-            {/*<Progress percent={progressPercent} showInfo={false} />*/}
           </div>
           {viewList.map((v) => (
             <Row key={v.label} gutter={10}>

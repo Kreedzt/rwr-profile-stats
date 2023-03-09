@@ -7,9 +7,9 @@ type ProgressBarProps = {
 
 const ProgressBar: FC<ProgressBarProps> = ({ value }) => {
   return (
-    <div className="h-2 w-full bg-gray-300 rounded-md">
+    <div className="h-2 w-full bg-gray-300 rounded-md w-full">
       <div
-        className="h-2 bg-green-500 rounded-md"
+        className="h-2 bg-green-500 rounded-md max-w-full"
         style={{
           width: value + "%",
         }}
