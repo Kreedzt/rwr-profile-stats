@@ -93,7 +93,7 @@ const Home: FC<RouteComponentProps> = () => {
               placeholder="输入用户名查询"
               onChange={(e) => setSearchText(e.target.value)}
             />
-            <div>
+            <div className="mt-2">
               <DangerButton
                 disabled={loading}
                 onClick={() => {
@@ -118,7 +118,9 @@ const Home: FC<RouteComponentProps> = () => {
               }}
             />
 
-            <p>更新时间：{cacheTime}</p>
+            <p className="text-green-500 font-semibold">
+              更新时间：{cacheTime}
+            </p>
 
             <div>
               <h5 className="font-sans text-xl font-semibold">查询结果列表</h5>
@@ -173,6 +175,7 @@ const Home: FC<RouteComponentProps> = () => {
               return (
                 <li key={item[0]}>
                   <ProfileListItem
+                    onClick={() => onGotoDetail(item[0])}
                     profile_id={item[0]}
                     username={item[2].username}
                     prefix={`#${index + 1}`}

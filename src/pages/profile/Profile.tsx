@@ -4,7 +4,7 @@ import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
 import { Alert, Button, Col, message, Progress, Row } from "antd";
 import {
-    getDynamicRankProgressPercent,
+  getDynamicRankProgressPercent,
   getRankProgressPercent,
   getViewList,
   ProfileViewListItem,
@@ -15,6 +15,9 @@ import RefreshButton from "../../components/refreshButton/RefreshButton";
 import "./Profile.less";
 import { CacheService } from "../../services/cache";
 import { SystemService } from "../../services/system";
+import WarnAlert from "../../components/alert/WarnAlert";
+import SuccessAlert from "../../components/alert/SuccessAlert";
+import PrimaryButton from "../../components/button/PrimaryButton";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -91,16 +94,15 @@ const Profile: FC<
   return (
     <div className="profile-page">
       <div>
-        <Alert
-          message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
-          type="warning"
-        />
-        <Alert message="可将此页面地址保存, 下次直接进入" type="success" />
-        <Alert message={`符号 '#' 表示排行`} type="success" />
+        <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
+        <SuccessAlert content="可将此页面地址保存, 下次直接进入" />
+        <SuccessAlert content="符号 '#' 表示排行" />
       </div>
-      <Button>
-        <Link to="/">&lt; 返回主页</Link>
-      </Button>
+      <PrimaryButton>
+        <Link to="/" className="text-white outline-0 hover:text-white">
+          &lt; 返回主页
+        </Link>
+      </PrimaryButton>
       <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
       <p>存档ID：{profileId}</p>
       <p>更新时间：{cacheTime}</p>
