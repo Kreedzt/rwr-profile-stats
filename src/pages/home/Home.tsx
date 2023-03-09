@@ -13,6 +13,9 @@ import DangerButton from "../../components/button/DangerButton";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import ProfileListItem from "../../components/list/ProfileListItem";
 import MainFooter from "../../components/footer/MainFooter";
+import UpdateTime from "../../components/time/UpdateTime";
+import WarnAlert from "../../components/alert/WarnAlert";
+import SearchInput from "../../components/input/SearchInput";
 
 const { Footer, Content } = Layout;
 // const { Item: ListItem } = List;
@@ -69,6 +72,14 @@ const Home: FC<RouteComponentProps> = () => {
     }
   }, [searchText, allList]);
 
+  const onSearchInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    e.target.value = e.target.value.toUpperCase();
+  }, []);
+
+  const onSearchValueChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  }, []);
+
   const onGotoDetail = useCallback((profileId: number) => {
     navigate(`/profile/${profileId}`);
   }, []);
@@ -80,19 +91,22 @@ const Home: FC<RouteComponentProps> = () => {
   return (
     <Layout className="home-layout">
       <div>
-        <Alert
-          message="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃"
-          type="warning"
-        />
+        <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
       </div>
       <Content className="home-content">
         <div className="query-area">
-          <div>
-            <Input
+          <div className="p-2">
+            <SearchInput
               value={searchText}
+              onInput={onSearchInput}
               placeholder="输入用户名查询"
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={onSearchValueChange}
             />
+            {/*<Input*/}
+            {/*  value={searchText}*/}
+            {/*  placeholder="输入用户名查询"*/}
+            {/*  onChange={(e) => setSearchText(e.target.value)}*/}
+            {/*/>*/}
             <div className="mt-2">
               <DangerButton
                 disabled={loading}
@@ -118,9 +132,7 @@ const Home: FC<RouteComponentProps> = () => {
               }}
             />
 
-            <p className="text-green-500 font-semibold">
-              更新时间：{cacheTime}
-            </p>
+            <UpdateTime content={`更新时间：${cacheTime}`} />
 
             <div>
               <h5 className="font-sans text-xl font-semibold">查询结果列表</h5>

@@ -18,6 +18,8 @@ import { SystemService } from "../../services/system";
 import WarnAlert from "../../components/alert/WarnAlert";
 import SuccessAlert from "../../components/alert/SuccessAlert";
 import PrimaryButton from "../../components/button/PrimaryButton";
+import UpdateTime from "../../components/time/UpdateTime";
+import ProgressBar from "../../components/progress/ProgressBar";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -103,7 +105,7 @@ const Profile: FC<
       </Link>
       <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
       <p>存档ID：{profileId}</p>
-      <p>更新时间：{cacheTime}</p>
+      <UpdateTime content={`更新时间：${cacheTime}`} />
       {loading ? (
         "请求中, 请稍候"
       ) : (
@@ -153,7 +155,11 @@ const Profile: FC<
                 {progressPercent}%
               </Col>
             </Row>
-            <Progress percent={progressPercent} showInfo={false} />
+            <ProgressBar value={progressPercent} />
+            {/*<progress max={100} value={progressPercent}>*/}
+            {/*  {progressPercent}%*/}
+            {/*</progress>*/}
+            {/*<Progress percent={progressPercent} showInfo={false} />*/}
           </div>
           {viewList.map((v) => (
             <Row key={v.label} gutter={10}>
