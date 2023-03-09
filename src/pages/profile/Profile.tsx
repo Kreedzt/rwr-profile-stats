@@ -98,11 +98,9 @@ const Profile: FC<
         <SuccessAlert content="可将此页面地址保存, 下次直接进入" />
         <SuccessAlert content="符号 '#' 表示排行" />
       </div>
-      <PrimaryButton>
-        <Link to="/" className="text-white outline-0 hover:text-white">
-          &lt; 返回主页
-        </Link>
-      </PrimaryButton>
+      <Link to="/">
+        <PrimaryButton>&lt; 返回主页</PrimaryButton>
+      </Link>
       <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
       <p>存档ID：{profileId}</p>
       <p>更新时间：{cacheTime}</p>
