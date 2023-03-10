@@ -108,7 +108,7 @@ const Profile: FC<
           onRefresh={() => refreshProfile(true)}
         />
       </div>
-      <p>存档ID：{profileId}</p>
+      <PropertyItem label="存档ID" value={profileId} />
       <UpdateTime content={`更新时间：${cacheTime}`} />
       {loading ? (
         "请求中, 请稍候"
@@ -119,8 +119,8 @@ const Profile: FC<
               label="XP"
               value={
                 currentProfile?.stats.rank_progression
-                  ? currentProfile?.stats.rank_progression * 10000
-                  : 0
+                  ? (currentProfile?.stats.rank_progression * 10000).toFixed(2)
+                  : "0"
               }
             />
             <PropertyItem label="当前等级" value={progressData.currentLabel} />
