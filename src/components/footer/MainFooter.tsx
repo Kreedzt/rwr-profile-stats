@@ -1,9 +1,19 @@
 import React, { FC } from "react";
 import { VERSION } from "../../constants";
+import { useCombineClassName } from "../../hooks/useCombineClassName";
 
-const MainFooter: FC = () => {
+type MainFooterProps = {
+  className?: string;
+};
+
+const MainFooter: FC<MainFooterProps> = ({ className }) => {
+  const combineClassName = useCombineClassName(
+    "relative bg-gray-200 isolate flex items-center gap-x-6 overflow-hidden py-2.5 px-6 sm:px-3.5 sm:before:flex-1",
+    [className]
+  );
+
   return (
-    <div className="relative bg-blue-light isolate flex items-center gap-x-6 overflow-hidden bg-gray-50 py-2.5 px-6 sm:px-3.5 sm:before:flex-1">
+    <div className={combineClassName}>
       <div className="flex flex-wrap items-center justify-center gap-y-2 gap-x-4">
         <p className="text-sm leading-6 text-gray-900 m-0">
           <strong className="font-semibold">v:{VERSION}</strong>

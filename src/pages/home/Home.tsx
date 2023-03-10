@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import React, { FC, useCallback, useEffect, useState } from "react";
-import { Alert, Button, Input, Layout, List, Typography } from "antd";
-import { RouteComponentProps, Link, useNavigate } from "@reach/router";
-import { VERSION } from "../../constants";
+import { Link, RouteComponentProps, useNavigate } from "@reach/router";
 import { Person } from "../../models/person";
 import { Profile } from "../../models/profile";
 import { ProfileService } from "../../services/profile";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
-import "./Home.less";
 import { SystemService } from "../../services/system";
 import DangerButton from "../../components/button/DangerButton";
 import PrimaryButton from "../../components/button/PrimaryButton";
@@ -15,10 +12,8 @@ import ProfileListItem from "../../components/list/ProfileListItem";
 import MainFooter from "../../components/footer/MainFooter";
 import UpdateTime from "../../components/time/UpdateTime";
 import WarnAlert from "../../components/alert/WarnAlert";
-import SearchInput from "../../components/input/SearchInput";
-
-const { Footer, Content } = Layout;
-// const { Item: ListItem } = List;
+import Input from "../../components/input/Input";
+import "./Home.less";
 
 type AllListItem = [number, Person, Profile];
 
@@ -73,12 +68,15 @@ const Home: FC<RouteComponentProps> = () => {
   }, [searchText, allList]);
 
   const onSearchInput = useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.toUpperCase();
+    (e.target as any).value = (e.target as any).value.toUpperCase();
   }, []);
 
-  const onSearchValueChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
-  }, []);
+  const onSearchValueChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchText(e.target.value);
+    },
+    []
+  );
 
   const onGotoDetail = useCallback((profileId: number) => {
     navigate(`/profile/${profileId}`);
@@ -89,26 +87,23 @@ const Home: FC<RouteComponentProps> = () => {
   }, []);
 
   return (
-    <Layout className="home-layout">
+    <div className="home-layout bg-gray-100">
       <div>
         <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
       </div>
-      <Content className="home-content">
+      <div className="home-content">
         <div className="query-area">
           <div className="p-2">
-            <SearchInput
+            <Input
               value={searchText}
               onInput={onSearchInput}
               placeholder="输入用户名查询"
               onChange={onSearchValueChange}
             />
-            {/*<Input*/}
-            {/*  value={searchText}*/}
-            {/*  placeholder="输入用户名查询"*/}
-            {/*  onChange={(e) => setSearchText(e.target.value)}*/}
-            {/*/>*/}
-            <div className="mt-2">
+
+            <div className="m-2">
               <DangerButton
+                className="md:mb-0 sm:mb-2 md:mr-2 sm:mr-0"
                 disabled={loading}
                 onClick={() => {
                   setSearchText("");
@@ -122,15 +117,17 @@ const Home: FC<RouteComponentProps> = () => {
                 查询
               </PrimaryButton>
             </div>
-            <RefreshButton
-              className="m-2"
-              loading={loading}
-              onRefresh={() => {
-                setSearchText("");
-                setNameUserList([]);
-                refreshList(true);
-              }}
-            />
+
+            <div className="m-2">
+              <RefreshButton
+                loading={loading}
+                onRefresh={() => {
+                  setSearchText("");
+                  setNameUserList([]);
+                  refreshList(true);
+                }}
+              />
+            </div>
 
             <UpdateTime content={`更新时间：${cacheTime}`} />
 
@@ -154,32 +151,15 @@ const Home: FC<RouteComponentProps> = () => {
                 })}
               </ul>
             </div>
-            {/*<List*/}
-            {/*  className="query-name-res-list"*/}
-            {/*  header={<div>查询结果列表</div>}*/}
-            {/*  dataSource={nameUserList}*/}
-            {/*  bordered*/}
-            {/*  size="small"*/}
-            {/*  renderItem={(item) => (*/}
-            {/*    <ListItem*/}
-            {/*      key={item[0]}*/}
-            {/*      className="query-list-item"*/}
-            {/*      onClick={() => onGotoDetail(item[0])}*/}
-            {/*    >*/}
-            {/*      <Typography.Text>*/}
-            {/*        <span>用户名: {item[2].username}</span>*/}
-            {/*        &nbsp; |&nbsp;*/}
-            {/*        <span>*/}
-            {/*          游玩时间: {(item[2].stats.time_played / 60).toFixed()}{" "}*/}
-            {/*          分钟*/}
-            {/*        </span>*/}
-            {/*      </Typography.Text>*/}
-            {/*      <Link to={`/profile/${item[0]}`}>点击跳转到详情</Link>*/}
-            {/*    </ListItem>*/}
-            {/*  )}*/}
-            {/*/>*/}
           </div>
         </div>
+
+        <div className="mt-2">
+          <Link to="/rank">
+            <PrimaryButton>跳转排名页面</PrimaryButton>
+          </Link>
+        </div>
+
         <div className="top-10-area">
           <h5 className="font-sans text-xl font-semibold">XP Top 10</h5>
           <ul className="query-name-res-list">
@@ -200,10 +180,9 @@ const Home: FC<RouteComponentProps> = () => {
             })}
           </ul>
         </div>
-      </Content>
-      {/*<Footer className="home-footer">RWR 信息查询系统, v: {VERSION}</Footer>*/}
+      </div>
       <MainFooter />
-    </Layout>
+    </div>
   );
 };
 

@@ -10,5 +10,6 @@ module.exports = {
       },
     },
   },
+  purge: ["./src/**/*.tsx"],
   plugins: [],
 };

@@ -1,7 +1,8 @@
-// SPDX-License-Identifier: GPL-3.0-only
-import { Profile, Stats } from "../../models/profile";
-import { RankItem } from "../../models/system";
-import CNTranslate from "./translate_cn.json";
+import {Profile} from "../models/profile";
+import CNTranslate from "../models/translate_cn.json";
+import {RankItem} from "../models/system";
+import {ComplexStats, Stats} from "../models/stats";
+import {AllProfileList} from "../models/response";
 
 interface GeneralArrayItem {
   label: string;
@@ -12,7 +13,6 @@ export type ProfileViewListItem = GeneralArrayItem & {
   rank?: number;
   displayText: string;
 };
-
 const getRankInList = (
   value: number,
   rankList: number[],
@@ -44,9 +44,59 @@ const getRankInList = (
 
   return rank;
 };
-
 type RankValueRecordKey = keyof Stats | "K/D";
-const getAllRankValue = (
+
+export const transformProfile2CStats = (
+  profile_id: number,
+  p: Profile
+): ComplexStats => {
+  const enhanceItem: ComplexStats = {
+    rank: 0,
+    profile_id,
+    username: p.username,
+    kills: p.stats.kills,
+    deaths: p.stats.deaths,
+    time_played: p.stats.time_played,
+    player_kills: p.stats.player_kills,
+    team_kills: p.stats.team_kills,
+    longest_kill_streak: p.stats.longest_kill_streak,
+    targets_destroyed: p.stats.targets_destroyed,
+    vehicles_destroyed: p.stats.vehicles_destroyed,
+    soldiers_healed: p.stats.soldiers_healed,
+    times_got_healed: p.stats.times_got_healed,
+    distance_moved: p.stats.distance_moved,
+    shots_fired: p.stats.shots_fired,
+    throwables_thrown: p.stats.throwables_thrown,
+    rank_progression: p.stats.rank_progression,
+    time_played_display: (p.stats.time_played / 60).toFixed(0) + " 分钟",
+    "K/D": 0,
+  };
+
+  if (p.stats.deaths === 0) {
+    enhanceItem["K/D"] = p.stats.kills;
+  } else {
+    enhanceItem["K/D"] = p.stats.kills / p.stats.deaths;
+  }
+
+  return enhanceItem;
+};
+
+/**
+ * 获取所有排行值, 附带排序方法
+ * @param list
+  */
+export const transformAll2StatsWithSort = (
+  list: AllProfileList
+): ComplexStats[] => {
+  return list.map((p) => transformProfile2CStats(p[0], p[2]));
+};
+
+/**
+ * 获取自身所有 rank 值
+ * @param p
+ * @param list
+ */
+const getProfileAllRankValue = (
   p: Profile,
   list: Profile[]
 ): Record<RankValueRecordKey, number> => {
@@ -86,10 +136,10 @@ const getAllRankValue = (
     deathsRank.push(listItem.stats.deaths);
     killsRank.push(listItem.stats.kills);
 
-    let kdRes = 0;
+    let kdRes: number;
 
     if (listItem.stats.deaths === 0) {
-      kdRes = listItem.stats.kills / 1;
+      kdRes = listItem.stats.kills;
     } else {
       kdRes = listItem.stats.kills / listItem.stats.deaths;
     }
@@ -191,12 +241,11 @@ const getAllRankValue = (
 
   return res;
 };
-
-export const getViewList = (
+export const getProfileViewList = (
   p: Profile,
   allList: Profile[]
 ): ProfileViewListItem[] => {
-  const rankValue = getAllRankValue(p, allList);
+  const rankValue = getProfileAllRankValue(p, allList);
   return [
     {
       label: CNTranslate["username"],
@@ -270,53 +319,6 @@ export const getViewList = (
   ];
 };
 
-const rankTarget: GeneralArrayItem[] = [
-  {
-    label: "2 星人形",
-    value: 0.0,
-  },
-  {
-    label: "3 星人形",
-    value: 1.0,
-  },
-  {
-    label: "4 星人形",
-    value: 5.0,
-  },
-  {
-    label: "5 星人形",
-    value: 10.0,
-  },
-  {
-    label: "6 星人形",
-    value: 100.0,
-  },
-  {
-    label: "1 月人形",
-    value: 200.0,
-  },
-  {
-    label: "2 月人形",
-    value: 300.0,
-  },
-  {
-    label: "3 月人形",
-    value: 400.0,
-  },
-  {
-    label: "4 月人形",
-    value: 500.0,
-  },
-  {
-    label: "5 月人形",
-    value: 750.0,
-  },
-  {
-    label: "1 日人形",
-    value: 1000.0,
-  },
-];
-
 export interface ProgressInfo {
   currentLabel: string;
   nextLabel: string;
@@ -324,48 +326,17 @@ export interface ProgressInfo {
   progress: number;
 }
 
-export const getRankProgressPercent = (p: Profile): ProgressInfo => {
+export const getDynamicRankProgressPercent = (
+  p: Profile,
+  ranks: RankItem[]
+): ProgressInfo => {
   const currentXp = p.stats.rank_progression;
 
   let nextXp = 0;
   let currentLabel = "";
   let nextLabel = "";
   let isFinished = false;
-  let progress = 0.0;
-
-  rankTarget.forEach((r) => {
-    if (isFinished) return;
-
-    nextXp = r.value;
-    nextLabel = r.label;
-
-    // 当前 XP < 目标 XP, 终止
-    if (currentXp < nextXp) {
-      isFinished = true;
-      return;
-    }
-
-    currentLabel = r.label;
-  });
-
-  progress = currentXp / nextXp;
-
-  return {
-    currentLabel,
-    nextLabel,
-    nextXp,
-    progress,
-  };
-};
-
-export const getDynamicRankProgressPercent = (p: Profile, ranks: RankItem[]): ProgressInfo => {
-  const currentXp = p.stats.rank_progression;
-
-  let nextXp = 0;
-  let currentLabel = "";
-  let nextLabel = "";
-  let isFinished = false;
-  let progress = 0.0;
+  let progress: number;
 
   ranks.forEach((r) => {
     if (isFinished) return;
@@ -390,4 +361,4 @@ export const getDynamicRankProgressPercent = (p: Profile, ranks: RankItem[]): Pr
     nextXp,
     progress,
   };
-}
+};

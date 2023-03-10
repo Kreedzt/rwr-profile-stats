@@ -1,20 +1,18 @@
-import React, { useMemo } from "react";
+import React from "react";
 import type { FC } from "react";
 import { useCombineClassName } from "../../hooks/useCombineClassName";
+import Button, { ButtonProps } from "./Button";
 
-type PrimaryButtonProps = React.DetailedHTMLProps<
-  React.ButtonHTMLAttributes<HTMLButtonElement>,
-  HTMLButtonElement
->;
+type PrimaryButtonProps = ButtonProps;
 
 const PrimaryButton: FC<PrimaryButtonProps> = (props) => {
   const { className, ...otherProps } = props;
   const combineClassName = useCombineClassName(
-    "inline-flex w-full justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto sm:text-sm disabled:bg-blue-200 ",
+    "bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 disabled:bg-blue-200",
     [className]
   );
 
-  return <button type="button" className={combineClassName} {...otherProps} />;
+  return <Button className={combineClassName} {...otherProps} />;
 };
 
 export default PrimaryButton;
