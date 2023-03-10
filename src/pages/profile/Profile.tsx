@@ -2,17 +2,15 @@
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
 import { ProfileService } from "../../services/profile";
-import { Alert, Button, Col, message, Progress, Row } from "antd";
+import { message } from "antd";
 import {
   getDynamicRankProgressPercent,
-  getRankProgressPercent,
   getViewList,
   ProfileViewListItem,
   ProgressInfo,
 } from "./utils";
 import { Profile as ProfileModel } from "../../models/profile";
 import RefreshButton from "../../components/refreshButton/RefreshButton";
-import "./Profile.less";
 import { CacheService } from "../../services/cache";
 import { SystemService } from "../../services/system";
 import WarnAlert from "../../components/alert/WarnAlert";
@@ -96,15 +94,20 @@ const Profile: FC<
 
   return (
     <div className="profile-page">
-      <div>
-        <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
-        <SuccessAlert content="可将此页面地址保存, 下次直接进入" />
-        <SuccessAlert content="符号 '#' 表示排行" />
+      <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
+      <SuccessAlert content="可将此页面地址保存, 下次直接进入" />
+      <SuccessAlert content="符号 '#' 表示排行" />
+
+      <div className="flex justify-center md:flex-row sm:flex-col flex-wrap sm:gap-2 md:gap-0 p-2">
+        <Link to="/" className="md:flex-none sm:flex-1 justify-end">
+          <PrimaryButton>&lt; 返回主页</PrimaryButton>
+        </Link>
+        <RefreshButton
+          className="md:flex-none sm:flex-1 justify-start"
+          loading={loading}
+          onRefresh={() => refreshProfile(true)}
+        />
       </div>
-      <Link to="/">
-        <PrimaryButton>&lt; 返回主页</PrimaryButton>
-      </Link>
-      <RefreshButton loading={loading} onRefresh={() => refreshProfile(true)} />
       <p>存档ID：{profileId}</p>
       <UpdateTime content={`更新时间：${cacheTime}`} />
       {loading ? (
