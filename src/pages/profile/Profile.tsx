@@ -20,6 +20,7 @@ import SuccessAlert from "../../components/alert/SuccessAlert";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import UpdateTime from "../../components/time/UpdateTime";
 import ProgressBar from "../../components/progress/ProgressBar";
+import PropertyItem from "../../components/propertyItem/PropertyItem";
 
 const Profile: FC<
   RouteComponentProps & {
@@ -110,68 +111,41 @@ const Profile: FC<
         "请求中, 请稍候"
       ) : (
         <>
-          <div className="p-2 border border-blue-200 mb-2">
-            <Row gutter={10}>
-              <Col className="tar" span={12}>
-                XP:
-              </Col>
-              <Col span={12} className="tal">
-                {currentProfile?.stats.rank_progression
+          <div className="p-2 border border-blue-200 m-2">
+            <PropertyItem
+              label="XP"
+              value={
+                currentProfile?.stats.rank_progression
                   ? currentProfile?.stats.rank_progression * 10000
-                  : 0}
-              </Col>
-            </Row>
-            <Row gutter={10}>
-              <Col className="tar" span={12}>
-                当前等级:
-              </Col>
-              <Col span={12} className="tal">
-                {progressData.currentLabel}
-              </Col>
-            </Row>
-            <Row gutter={10}>
-              <Col className="tar" span={12}>
-                下一等级:
-              </Col>
-              <Col span={12} className="tal">
-                {progressData.nextLabel}
-              </Col>
-            </Row>
+                  : 0
+              }
+            />
+            <PropertyItem label="当前等级" value={progressData.currentLabel} />
+            <PropertyItem label="下一等级" value={progressData.nextLabel} />
+            <PropertyItem
+              label="下一等级目标XP"
+              value={progressData.nextXp * 10000}
+            />
+            <PropertyItem label="进度" value={`${progressPercent}%`} />
 
-            <Row gutter={10}>
-              <Col className="tar" span={12}>
-                下一等级目标XP:
-              </Col>
-              <Col span={12} className="tal">
-                {progressData.nextXp * 10000}
-              </Col>
-            </Row>
-
-            <Row gutter={10}>
-              <Col className="tar" span={12}>
-                进度:
-              </Col>
-              <Col span={12} className="tal">
-                {progressPercent}%
-              </Col>
-            </Row>
             <ProgressBar value={progressPercent} />
           </div>
           {viewList.map((v) => (
-            <Row key={v.label} gutter={10}>
-              <Col className="tar" span={12}>
-                {v.label}:
-              </Col>
-              <Col className="tal" span={12}>
-                {v.displayText}
-                {v.rank && (
-                  <>
-                    <span>&nbsp; | &nbsp;</span>
-                    <span>#{v.rank}</span>
-                  </>
-                )}
-              </Col>
-            </Row>
+            <PropertyItem
+              key={v.label}
+              label={v.label}
+              value={
+                <>
+                  {v.displayText}
+                  {v.rank && (
+                    <>
+                      <span>&nbsp; | &nbsp;</span>
+                      <span>#{v.rank}</span>
+                    </>
+                  )}
+                </>
+              }
+            />
           ))}
         </>
       )}
