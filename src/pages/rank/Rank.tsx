@@ -294,7 +294,7 @@ const Rank: FC<RankProps> = (props) => {
           />
           <Input
             placeholder="输入页码"
-            type="number"
+            type={'number' as any}
             value={page}
             onChange={onPageInput}
           />
@@ -319,7 +319,7 @@ const Rank: FC<RankProps> = (props) => {
                   profile_id={item.profile_id}
                   username={item.username}
                   prefix={`#${item.rank + 1}`}
-                  content={`${EnhancedTranslate[selectOrder]}: ${item[selectOrder]}`}
+                  content={`${(EnhancedTranslate as any)[selectOrder]}: ${item[selectOrder]}`}
                 />
               </li>
             ))}
