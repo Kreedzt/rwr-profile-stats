@@ -2,13 +2,15 @@ import React, { useMemo } from "react";
 import type { FC } from "react";
 import Alert from "./Alert";
 import { IAlertProps } from "./types";
+import { useCombineClassName } from "../../hooks/useCombineClassName";
 
 const SuccessAlert: FC<IAlertProps> = (props) => {
   const { className, ...otherProps } = props;
 
-  const combineClassName = useMemo(() => {
-    return "bg-green-100 border-green-300 " + className ?? "";
-  }, [className]);
+  const combineClassName = useCombineClassName(
+    "bg-green-100 border-green-300",
+    [className]
+  );
 
   return <Alert className={combineClassName} {...otherProps} />;
 };
