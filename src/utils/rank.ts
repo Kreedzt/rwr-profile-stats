@@ -1,16 +1,23 @@
-import {Profile} from "../models/profile";
+import { Profile } from "../models/profile";
 import CNTranslate from "../models/translate_cn.json";
-import {RankItem} from "../models/system";
-import {ComplexStats, Stats} from "../models/stats";
-import {AllProfileList} from "../models/response";
+import { RankItem } from "../models/system";
+import { ComplexStats, Stats } from "../models/stats";
+import { AllProfileList } from "../models/response";
 
-interface GeneralArrayItem {
+export interface GeneralArrayItem {
   label: string;
   value: any;
 }
 
+export enum SortEnum {
+  ASC = "asc",
+  DESC = "desc",
+}
+
 export type ProfileViewListItem = GeneralArrayItem & {
+  key: string;
   rank?: number;
+  sort: SortEnum;
   displayText: string;
 };
 const getRankInList = (
@@ -84,7 +91,7 @@ export const transformProfile2CStats = (
 /**
  * 获取所有排行值, 附带排序方法
  * @param list
-  */
+ */
 export const transformAll2StatsWithSort = (
   list: AllProfileList
 ): ComplexStats[] => {
@@ -248,69 +255,85 @@ export const getProfileViewList = (
   const rankValue = getProfileAllRankValue(p, allList);
   return [
     {
+      key: "username",
+      sort: SortEnum.ASC,
       label: CNTranslate["username"],
       value: p.username,
       displayText: p.username,
     },
     {
+      key: "sid",
+      sort: SortEnum.ASC,
       label: CNTranslate["sid"],
       value: p.sid,
       displayText: p.sid,
     },
     {
+      key: "squad_tag",
+      sort: SortEnum.ASC,
       label: CNTranslate["squad_tag"],
       value: p.squad_tag,
       displayText: p.squad_tag,
     },
     {
+      key: "kills",
+      sort: SortEnum.DESC,
       label: CNTranslate["kills"],
       value: p.stats.kills,
       rank: rankValue["kills"],
       displayText: p.stats.kills.toString(),
     },
     {
+      key: "deaths",
+      sort: SortEnum.ASC,
       label: CNTranslate["deaths"],
       value: p.stats.deaths,
       rank: rankValue["deaths"],
       displayText: p.stats.deaths.toString(),
     },
     {
+      key: "K/D",
+      sort: SortEnum.DESC,
       label: CNTranslate["K/D"],
       value: `${(p.stats.kills / p.stats.deaths).toFixed(2)}`,
       rank: rankValue["K/D"],
       displayText: (p.stats.kills / p.stats.deaths).toFixed(2),
     },
     {
+      key: "soldiers_healed",
+      sort: SortEnum.DESC,
       label: CNTranslate["soldiers_healed"],
       value: p.stats.soldiers_healed,
       rank: rankValue["soldiers_healed"],
       displayText: p.stats.soldiers_healed.toString(),
     },
-    // {
-    //   label: CNTranslate["player_kills"],
-    //   value: p.stats.player_kills,
-    //   rank: rankValue["player_kills"],
-    //   displayText: p.stats.player_kills.toString(),
-    // },
     {
+      key: "team_kills",
+      sort: SortEnum.ASC,
       label: CNTranslate["team_kills"],
       value: p.stats.team_kills,
       rank: rankValue["team_kills"],
       displayText: p.stats.team_kills.toString(),
     },
     {
+      key: "time_played",
+      sort: SortEnum.DESC,
       label: CNTranslate["time_played"],
       value: p.stats.time_played,
       rank: rankValue["time_played"],
       displayText: `${(p.stats.time_played / 60).toFixed(0)} 分钟`,
     },
     {
+      key: "vehicles_destroyed",
+      sort: SortEnum.DESC,
       label: CNTranslate["vehicles_destroyed"],
       value: p.stats.vehicles_destroyed,
       rank: rankValue["vehicles_destroyed"],
       displayText: p.stats.vehicles_destroyed.toString(),
     },
     {
+      key: "targets_destroyed",
+      sort: SortEnum.DESC,
       label: CNTranslate["targets_destroyed"],
       value: p.stats.targets_destroyed,
       rank: rankValue["targets_destroyed"],

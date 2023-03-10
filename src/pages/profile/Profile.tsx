@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 import React, { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { RouteComponentProps, Link } from "@reach/router";
+import { RouteComponentProps, Link, navigate } from "@reach/router";
 import { message } from "antd";
 import { ProfileService } from "../../services/profile";
 import { Profile as ProfileModel } from "../../models/profile";
@@ -85,6 +85,12 @@ const Profile: FC<
     }
   }, []);
 
+  const onLocateRank = useCallback((v: ProfileViewListItem) => {
+    const startPage = Math.floor(v.rank! / 10) + 1;
+
+    navigate(`/rank?order=${encodeURIComponent(v.key)}&sort=${v.sort}&page=${startPage}`);
+  }, []);
+
   useEffect(() => {
     refreshProfile();
   }, []);
@@ -98,7 +104,7 @@ const Profile: FC<
       <div>
         <WarnAlert content="数据每 1 小时更新一次, 请勿频繁查询导致服务器崩溃" />
         <SuccessAlert content="可将此页面地址保存, 下次直接进入" />
-        <SuccessAlert content="符号 '#' 表示排行" />
+        <SuccessAlert content="符号 '#' 表示排行, 点击后可定位排名" />
 
         <div className="flex justify-center md:flex-row sm:flex-col flex-wrap sm:gap-2 md:gap-0 p-2">
           <Link to="/" className="md:flex-none sm:flex-1 justify-end">
@@ -148,10 +154,12 @@ const Profile: FC<
                   <>
                     {v.displayText}
                     {v.rank && (
-                      <>
+                      <span onClick={() => onLocateRank(v)}>
                         <span>&nbsp; | &nbsp;</span>
-                        <span>#{v.rank}</span>
-                      </>
+                        <span className="cursor-pointer underline text-blue-700">
+                          #{v.rank}
+                        </span>
+                      </span>
                     )}
                   </>
                 }

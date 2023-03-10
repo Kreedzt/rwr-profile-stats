@@ -1,6 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import type { FC } from "react";
-import { Link, RouteComponentProps, useNavigate } from "@reach/router";
+import {
+  Link,
+  RouteComponentProps,
+  useLocation,
+  useNavigate,
+} from "@reach/router";
 import WarnAlert from "../../components/alert/WarnAlert";
 import SuccessAlert from "../../components/alert/SuccessAlert";
 import Translate from "../../models/translate_cn.json";
@@ -10,7 +15,7 @@ import RefreshButton from "../../components/refreshButton/RefreshButton";
 import Input from "../../components/input/Input";
 import DangerButton from "../../components/button/DangerButton";
 import ProfileListItem from "../../components/list/ProfileListItem";
-import { transformAll2StatsWithSort } from "../../utils/rank";
+import { SortEnum, transformAll2StatsWithSort } from "../../utils/rank";
 import { ProfileService } from "../../services/profile";
 import { SystemService } from "../../services/system";
 import { ComplexStats } from "../../models/stats";
@@ -72,11 +77,6 @@ const EnhancedTranslate = {
   time_played_display: Translate.time_played,
 };
 
-enum SortEnum {
-  ASC = "asc",
-  DESC = "desc",
-}
-
 const SORT_SELECT_OPTIONS: Array<{
   label: string;
   value: string;
@@ -91,15 +91,27 @@ const SORT_SELECT_OPTIONS: Array<{
   },
 ];
 
-const Rank: FC<RankProps> = () => {
+const Rank: FC<RankProps> = (props) => {
   const navigate = useNavigate();
+
+  const searchParams = useMemo(() => {
+    const sp = new URLSearchParams(props.location?.search);
+    return sp;
+  }, []);
+
   const [loading, setLoading] = useState(false);
   const [selectOrder, setSelectOrder] = useState<keyof ComplexStats>(
-    ORDER_SELECT_OPTIONS[0].value
+    (searchParams.get("order") as undefined | keyof ComplexStats) ??
+      ORDER_SELECT_OPTIONS[0].value
   );
+  const [selectSort, setSelectSort] = useState<string>(
+    searchParams.get("sort") ?? SortEnum.DESC
+  );
+  const [page, setPage] = useState<number>(
+    searchParams.get("page") ? +searchParams.get("page")! : 1
+  );
+
   const [refreshTime, setRefreshTime] = useState<string>();
-  const [selectSort, setSelectSort] = useState<string>(SortEnum.DESC);
-  const [page, setPage] = useState<number>(1);
   const [dataList, setDataList] = useState<ComplexStats[]>([]);
   const [maxCount, setMaxCount] = useState<number>(0);
 
